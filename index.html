@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Winter 2026 Growth & Compliance Event</title>
+<style>
+  /* Base */
+  *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif;}
+  html,body{height:100%;background:#0f172a;color:#e2e8f0;scroll-behavior:smooth;}
+  a{text-decoration:none;color:inherit;}
+  img{max-width:100%;display:block;}
+  button{cursor:pointer;}
+
+  /* Header Hero */
+  header{
+    position:relative;
+    background:#0c1233;
+    color:#fff;
+    text-align:center;
+    padding:120px 20px 80px;
+    overflow:hidden;
+  }
+  header h1{
+    font-size:42px;
+    font-weight:800;
+    margin-bottom:16px;
+  }
+  header p.lead{
+    font-size:18px;
+    color:#cbd5e1;
+    max-width:800px;
+    margin:0 auto 32px;
+  }
+  .btn-primary{
+    background:#3b82f6;color:#fff;border:none;padding:16px 32px;border-radius:8px;font-weight:700;font-size:16px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:all .2s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.4);}
+
+  /* Snow Canvas */
+  canvas#snow{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.4;}
+
+  /* Glass card overlay */
+  .hero-card{
+    position:relative;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(12px);
+    padding:40px;
+    border-radius:16px;
+    display:inline-block;
+    z-index:1;
+    border:1px solid rgba(255,255,255,0.1);
+  }
+
+  /* Discount Banner */
+  .discount-banner{
+    margin:24px auto 0;
+    display:inline-flex;
+    gap:12px;
+    align-items:center;
+    padding:12px 24px;
+    background:rgba(255,255,255,0.05);
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.15);
+    font-weight:600;
+    backdrop-filter:blur(6px);
+  }
+  .discount-banner b{color:#3b82f6;font-size:16px;}
+
+  
+  /* Fade Up */
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(25px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade In */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Soft Glow Pulse */
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 0px rgba(59,130,246,0.2); }
+  50% { box-shadow: 0 0 18px rgba(59,130,246,0.45); }
+  100% { box-shadow: 0 0 0px rgba(59,130,246,0.2); }
+}
+
+/* Reveal on scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all .8s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+  .hero-content h1 {
+  animation: fadeUp 1.1s ease forwards;
+}
+
+.hero-content p {
+  animation: fadeUp 1.4s ease forwards;
+}
+
+.btn-primary {
+  animation: fadeUp 1.7s ease forwards;
+  box-shadow: 0 0 0 rgba(59,130,246,0.4);
+  transition: 0.3s;
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  animation: glowPulse 1.8s infinite;
+}
+
+  .live-support-section {
+  padding: 80px 20px;
+  background: linear-gradient(to right, rgba(59,130,246,0.15), rgba(56,189,248,0.05));
+  border-radius: 16px;
+  max-width: 900px;
+  margin: 60px auto;
+  backdrop-filter: blur(6px);
+}
+.live-support-section h2 {
+  animation: fadeUp 0.9s ease;
+}
+.live-support-section p {
+  animation: fadeUp 1.2s ease;
+}
+
+  .process-section {
+  padding: 80px 20px;
+  max-width: 900px;
+  margin: 60px auto;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.process-section ol li {
+  margin-bottom: 18px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  animation: fadeUp 0.9s ease;
+  transition: 0.3s;
+}
+
+.process-section ol li:hover {
+  transform: translateX(8px);
+  border-color: #3b82f6;
+  background: rgba(59,130,246,0.12);
+}
+
+  .faq-section p {
+  padding: 18px 22px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  transition: 0.3s ease;
+  cursor: pointer;
+  animation: fadeUp 1s ease;
+}
+
+.faq-section p:hover {
+  background: rgba(59,130,246,0.15);
+  border-color: #3b82f6;
+  transform: translateY(-3px);
+}
+
+  
+  /* Partner Scroll */
+  .partners{overflow:hidden;padding:32px 0;border-top:1px solid #1e293b;border-bottom:1px solid #1e293b;}
+  .partner-track{display:inline-flex;animation:scroll 30s linear infinite;gap:60px;}
+  .partner-track img{height:40px;opacity:0.7;filter:brightness(1.2);}
+  @keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+
+  /* Services Section */
+  section.services{padding:80px 20px;}
+  .services h2{text-align:center;font-size:36px;margin-bottom:16px;font-weight:800;color:#f1f5f9;}
+  .services p.sub{text-align:center;color:#cbd5e1;margin-bottom:48px;font-size:18px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;}
+
+  .card{
+    background:#1e293b;padding:32px;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,0.5);
+    border:1px solid #334155;transition:all .3s ease;display:flex;flex-direction:column;
+  }
+  .card:hover{box-shadow:0 12px 32px rgba(0,0,0,0.6);transform:translateY(-8px);}
+  .card h3{font-size:22px;font-weight:700;margin-bottom:12px;color:#f8fafc;}
+  .card p{flex-grow:1;font-size:15px;color:#cbd5e1;margin-bottom:24px;line-height:1.6;}
+
+  /* Form Section in Card */
+  .form-section{display:none;margin-top:16px;padding-top:16px;border-top:1px solid #334155;}
+  .form-section.active{display:block;}
+  label{display:block;font-size:14px;font-weight:600;margin-bottom:6px;color:#cbd5e1;}
+  input,select{width:100%;padding:12px;margin-bottom:16px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:#f1f5f9;font-size:14px;outline:none;}
+  input:focus,select:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,0.2);}
+  .select-btn{background:#3b82f6;color:#fff;padding:12px;border-radius:8px;border:none;font-weight:700;width:100%;margin-bottom:12px;}
+  .select-btn.active{background:#64748b;}
+
+  .btn-primary.block{width:100%;padding:14px;margin-top:8px;}
+  .form-note{font-size:13px;color:#94a3b8;margin-bottom:12px;}
+
+  /* Sections extra */
+  section.info-block{
+    padding:80px 20px;
+    max-width:900px;
+    margin:0 auto;
+    line-height:1.7;
+  }
+  section.info-block h2{
+    font-size:32px;
+    font-weight:800;
+    text-align:center;
+    margin-bottom:20px;
+    color:#f8fafc;
+  }
+
+  /* Footer */
+  footer{padding:32px 20px;text-align:center;color:#94a3b8;background:rgba(255,255,255,0.05);backdrop-filter:blur(8px);border-top:1px solid #334155;margin-top:40px;}
+
+  /* Responsive */
+  @media(max-width:768px){.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- TOP SHOPIFY LOGO -->
+  <a class="focus-ring py-5 flex gap-8 items-center rounded-[4px] no-underline text-label-1 back-to-top" data-scroll-to-top="true" data-discover="true" href="/editions/summer2025" bis_skin_checked="1"><svg class="size-24 global-lg:size-18" xmlns="http://www.w3.org/2000/svg" width="18" height="19" fill="none" viewBox="0 0 18 19"><path fill="currentColor" d="m11.975 2.421-.54.167a3.775 3.775 0 0 0-.258-.634C10.796 1.226 10.237.84 9.56.84h-.002c-.047 0-.093.004-.14.009a1.124 1.124 0 0 0-.061-.07C9.062.463 8.684.309 8.232.322 7.359.348 6.49.978 5.785 2.098c-.496.787-.873 1.778-.98 2.543l-1.719.532c-.506.16-.522.175-.588.651-.05.362-1.373 10.598-1.373 10.598l10.983 1.9V2.399a.67.67 0 0 0-.133.022Zm-2.536.785-1.852.574c.18-.686.518-1.369.935-1.815.156-.167.373-.352.63-.458.24.504.293 1.217.287 1.7ZM8.25.903a.886.886 0 0 1 .525.139 2.531 2.531 0 0 0-.678.527c-.555.595-.98 1.519-1.149 2.41l-1.521.47C5.727 3.048 6.903.943 8.25.904ZM6.551 8.891c.06.935 2.517 1.139 2.655 3.328.109 1.721-.913 2.899-2.386 2.992-1.767.111-2.74-.93-2.74-.93l.374-1.594s.98.739 1.763.69c.512-.033.695-.45.677-.743-.077-1.22-2.078-1.148-2.205-3.15-.106-1.685 1-3.393 3.442-3.547.942-.059 1.423.181 1.423.181l-.559 2.089s-.623-.283-1.36-.237c-1.083.067-1.095.75-1.084.921Zm3.468-5.864c-.006-.442-.059-1.057-.265-1.589.662.126.989.875 1.126 1.322l-.86.267ZM12.47 18.278l4.557-1.133S15.065 3.882 15.053 3.791a.174.174 0 0 0-.158-.147c-.066-.005-1.348-.025-1.348-.025s-.782-.76-1.075-1.047v15.706h-.001Z"></path></svg><span class="flex flex-col gap-2 global-lg:flex-row global-lg:gap-8"><span>Shopify Editions</span><span class="opacity-60">Summer ’25</span></span></a>
+<div style="width:100%;text-align:center;padding:20px 0;">
+  <img src="" height="40">
+</div>
+
+<!-- Snow -->
+<canvas id="snow"></canvas>
+
+<!-- Header -->
+<header>
+  <div class="hero-card" data-fade>
+    <h1>Winter 2026 Growth & Compliance Event</h1>
+    <p class="lead">Black Friday & Holiday packages: setup, secure, and launch Meta ads that convert before you scale.</p>
+
+    <!-- FIXED EXPLORE BUTTON -->
+    <a href="#services" 
+       class="btn-primary"
+       onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'});return false;">
+       Explore Packages
+    </a>
+
+    <div class="discount-banner">
+      <b>Up to 60% OFF</b> Winter Packages — Start from $100 and scale up.
+    </div>
+  </div>
+</header>
+
+<!-- Partners -->
+<div class="partners">
+  <div class="partner-track">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/TikTok_logo.svg">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/Meta_Platforms_Inc._logo.svg">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Facebook_f_logo_%282021%29.svg">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg">
+  </div>
+</div>
+
+<!-- Services -->
+<section class="services" id="services">
+  <h2>Pick Your Service</h2>
+  <p class="sub">Hover & select to submit details instantly.</p>
+
+  <div class="grid">
+
+    <!-- SERVICE 1 -->
+    <div class="card">
+      <h3>Store Growth & Optimization</h3>
+      <div style="margin-bottom:10px;font-size:14px;color:#3b82f6;font-weight:700;">Winter Discount: <span style="color:#38bdf8;">-40%</span></div>
+      <p>Full shop setup, optimization, checkout and product enhancements.</p>
+      <button class="select-btn">Select</button>
+
+      <div class="form-section">
+        <label>Email</label>
+        <input type="email" class="form-email">
+        <label>Shop Name</label>
+        <input type="text" class="form-name">
+        <label>Shop URL</label>
+        <input type="text" class="form-url">
+        <label>Budget Range</label>
+        <select class="form-budget">
+          <option>$500 - $1000</option>
+          <option>$1000 - $2000</option>
+          <option>$2000 - $3000</option>
+          <option>$5000+</option>
+          <option>Talk to Partner</option>
+        </select>
+        <label>Message (Optional)</label>
+        <input type="text" class="form-message">
+
+        <div class="form-note">Choose your preferred chat platform:</div>
+        <button class="btn-primary block" style="background:#25D366" onclick="openChat('growth','whatsapp',this)">Submit via WhatsApp</button>
+        <button class="btn-primary block" style="background:#0088cc" onclick="openChat('growth','telegram',this)">Submit via Telegram</button>
+      </div>
+    </div>
+
+    <!-- SERVICE 2 -->
+    <div class="card">
+      <h3>Compliance & Fraud Prevention</h3>
+      <div style="margin-bottom:10px;font-size:14px;color:#3b82f6;font-weight:700;">Winter Discount: <span style="color:#38bdf8;">-55%</span></div>
+      <p>Secure your store with fraud detection, Shopify-compliant policies & monitoring.</p>
+      <button class="select-btn">Select</button>
+
+      <div class="form-section">
+        <label>Email</label>
+        <input type="email" class="form-email">
+        <label>Shop Name</label>
+        <input type="text" class="form-name">
+        <label>Shop URL</label>
+        <input type="text" class="form-url">
+        <label>Budget Range</label>
+        <select class="form-budget">
+          <option>$500 - $1000</option>
+          <option>$1000 - $2000</option>
+          <option>$2000 - $3000</option>
+          <option>$5000+</option>
+          <option>Talk to Partner</option>
+        </select>
+        <label>Message</label>
+        <input type="text" class="form-message">
+
+        <div class="form-note">Choose your platform:</div>
+        <button class="btn-primary block" style="background:#25D366" onclick="openChat('fraud','whatsapp',this)">Submit via WhatsApp</button>
+        <button class="btn-primary block" style="background:#0088cc" onclick="openChat('fraud','telegram',this)">Submit via Telegram</button>
+      </div>
+    </div>
+
+    <!-- SERVICE 3 (MAIN FOCUS) -->
+    <div class="card">
+      <h3>Meta / Online Shop Setup</h3>
+      <div style="margin-bottom:10px;font-size:14px;color:#3b82f6;font-weight:700;">Winter Discount: <span style="color:#38bdf8;">-60%</span></div>
+      <p>Full Facebook, TikTok, Instagram shop setup with smooth product sync.</p>
+      <button class="select-btn">Select</button>
+
+      <div class="form-section">
+        <label>Email</label>
+        <input type="email" class="form-email">
+        <label>Shop Name</label>
+        <input type="text" class="form-name">
+        <label>Shop URL</label>
+        <input type="text" class="form-url">
+        <label>Platform</label>
+        <select class="form-budget">
+          <option>Facebook</option>
+          <option>Instagram</option>
+          <option>TikTok</option>
+          <option>All</option>
+        </select>
+        <label>Message (Optional)</label>
+        <input type="text" class="form-message">
+
+        <div class="form-note">Choose your platform:</div>
+        <button class="btn-primary block" style="background:#25D366" onclick="openChat('meta','whatsapp',this)">Submit via WhatsApp</button>
+        <button class="btn-primary block" style="background:#0088cc" onclick="openChat('meta','telegram',this)">Submit via Telegram</button>
+      </div>
+    </div>
+
+    <!-- SERVICE 4 -->
+    <div class="card">
+      <h3>Holiday Ad & Checkout Boost</h3>
+      <div style="margin-bottom:10px;font-size:14px;color:#3b82f6;font-weight:700;">Winter Discount: <span style="color:#38bdf8;">-35%</span></div>
+      <p>Drive holiday sales with optimized checkout & rapid ad campaigns.</p>
+      <button class="select-btn">Select</button>
+
+      <div class="form-section">
+        <label>Email</label>
+        <input type="email" class="form-email">
+        <label>Shop Name</label>
+        <input type="text" class="form-name">
+        <label>Shop URL</label>
+        <input type="text" class="form-url">
+        <label>Budget Range</label>
+        <select class="form-budget">
+          <option>$500 - $1000</option>
+          <option>$1000 - $2000</option>
+          <option>$2000 - $3000</option>
+          <option>$5000+</option>
+          <option>Talk to Partner</option>
+        </select>
+        <label>Message</label>
+        <input type="text" class="form-message">
+        <div class="form-note">Choose platform:</div>
+        <button class="btn-primary block" style="background:#25D366" onclick="openChat('holiday','whatsapp',this)">Submit via WhatsApp</button>
+        <button class="btn-primary block" style="background:#0088cc" onclick="openChat('holiday','telegram',this)">Submit via Telegram</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- WHY LIVE SUPPORT -->
+<section class="info-block">
+  <section class="reveal live-support-section">
+  <h2>Why Live Support?</h2>
+  <p>
+    Your store moves fast — your support should too.  
+    Live chat gives you instant fixes, same-day troubleshooting, and real-time guidance so your store never stalls.
+    No ticket queues. No waiting days. Just straight solutions.
+  </p>
+</section>
+
+
+<!-- HOW THE PROCESS WORKS -->
+  <section class="reveal process-section">
+<section class="info-block">
+  <h2>How the Process Works</h2>
+  <ol style="padding-left:20px;color:#cbd5e1;font-size:17px;">
+    <li>You pick a service package.</li>
+    <li>You fill in the mini form in the card.</li>
+    <li>You submit directly through WhatsApp or Telegram.</li>
+    <li>We review your needs in minutes.</li>
+    <li>You receive a full breakdown: price, timeline, requirements.</li>
+    <li>Work begins immediately after confirmation.</li>
+  </ol>
+</section>
+
+
+<!-- FAQ -->
+    <section class="reveal faq-section">
+
+<section class="info-block">
+  <h2>FAQ</h2>
+  <p><b>• How fast can the work start?</b><br>Instanly — most tasks begin within 30 minutes.</p>
+  <p><b>• Can you work with paused stores?</b><br>Yes, inactive or paused stores can be revived or rebuilt.</p>
+  <p><b>• Do I need to share passwords?</b><br>No. We use Shopify Staff Access for your security.</p>
+  <p><b>• Can I pay in milestones?</b><br>Yes — flexible installment options are available.</p>
+</section>
+
+
+<footer>
+  <div class="border-t border-white-20 py-20 flex justify-between gap-6 flex-row sm:items-center flex-wrap" bis_skin_checked="1"><span class="linkfooter uppercase order-2 sm:order-0">© Shopify Inc</span><div class="flex justify-between font-inter-variable text-size-menu w-full sm:w-auto order-1 sm:order-0 sm:justify-center sm:gap-10 md:gap-20 pb-20 sm:pb-0" bis_skin_checked="1"><a class="relative text-white squiggle-link" data-component-name="cta-inline-link" rel="noopener noreferrer" href="https://community.shopify.dev/?utm_source=s25-editions-website&amp;utm_medium=product-cta&amp;utm_campaign=summer25edition" target="_blank">Developer Forums</a><a class="relative text-white squiggle-link" data-component-name="cta-inline-link" rel="noopener noreferrer" href="https://www.shopify.com/legal/terms?utm_source=s25-editions-website&amp;utm_medium=product-cta&amp;utm_campaign=summer25edition" target="_blank">Terms of Service</a><a class="relative text-white squiggle-link" data-component-name="cta-inline-link" rel="noopener noreferrer" href="https://www.shopify.com/legal/privacy?utm_source=s25-editions-website&amp;utm_medium=product-cta&amp;utm_campaign=summer25edition" target="_blank">Privacy Policy</a></div><span class="linkfooter uppercase order-3 sm:order-0">Winter 2026</span></div>
+</footer>
+
+<script>
+  // Snow
+  const canvas = document.getElementById('snow');
+  const ctx = canvas.getContext('2d');
+  let w=canvas.width=window.innerWidth, h=canvas.height=window.innerHeight;
+  let particles=[];
+  for(let i=0;i<200;i++){particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*3+1,d:Math.random()});}
+  function drawSnow(){ctx.clearRect(0,0,w,h);particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);ctx.fillStyle='rgba(59,130,246,0.7)';ctx.shadowBlur=4;ctx.shadowColor='rgba(59,130,246,0.5)';ctx.fill();p.y+=Math.cos(p.d)+1+p.r/2;if(p.y>h){p.y=0;p.x=Math.random()*w;}});}
+  setInterval(drawSnow,33);
+  window.addEventListener('resize',()=>{w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;});
+
+  // Toggle form sections
+  document.querySelectorAll('.select-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      btn.classList.toggle('active');
+      btn.nextElementSibling.classList.toggle('active');
+    });
+  });
+
+  // Chat
+  function openChat(service, platform, btn){
+    const card = btn.closest('.card');
+    const email = card.querySelector('.form-email').value;
+    const name = card.querySelector('.form-name').value;
+    const url = card.querySelector('.form-url').value;
+    const budget = card.querySelector('.form-budget').value;
+    const message = card.querySelector('.form-message').value;
+
+    if(!email || !name || !url){
+      alert('Please fill in Email, Shop Name, and Shop URL');
+      return;
+    }
+
+    let msg=`Hello, I submitted the ${service} service.\nEmail: ${email}\nShop Name: ${name}\nShop URL: ${url}\nBudget: ${budget}`;
+    if(message) msg+=`\nMessage: ${message}`;
+
+    let chatUrl='';
+    if(platform==='whatsapp'){
+      chatUrl=`https://wa.me/2349032365125?text=${encodeURIComponent(msg)}`;
+    } else {
+      chatUrl=`https://t.me/Xcellexert?text=${encodeURIComponent(msg)}`;
+    }
+    window.open(chatUrl,'_blank');
+  }
+</script>
+
+  <script>
+  const reveals = document.querySelectorAll('.reveal');
+  window.addEventListener('scroll', () => {
+    reveals.forEach(el => {
+      const rect = el.getBoundingClientRect().top;
+      if (rect < window.innerHeight - 100) {
+        el.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
